@@ -44,14 +44,21 @@ def lockDevice(email):
     lockList = findDevice(email) 
 
     #This loop should work but it doesn't See https://documenter.getpostman.com/view/7928889/SVmsVg6K?version=latest#5c4e48b6-1a5f-4c60-ae80-26bf1d64ec09
+    #I've tried this using two differet formatting methods for the ID. Both fail if I roll through the loop.
     for i in lockList:
-        lockstr = "\"{\r\n \"ids\":"
-        lockstr += "\"\\\"" + i + "\\\"\"\r\n}\""
-        print(lockstr)
+        payload = "\'{\"ids\":\""
+        payload += i
+        payload += "\"}\'"
+        print(payload)
+        response = requests.request("PUT", 'https://api.meraki.com/api/v0/networks/'+ getNet() +'/sm/devices/lock' , headers=headers, data= payload)
+        print(response.text.encode('utf8'))
+        # lockstr = "\"{\r\n \"ids\":"
+        # lockstr += "\"\\\"" + i + "\\\"\"\r\n}\""
+        # print(lockstr)
     #despite the documentation, this is how the ID needs to be formatted. But I can't figure out how to add a new lock code.   
-    payload = '{"ids":"575334852397107558"}'
-    response = requests.request("PUT", 'https://api.meraki.com/api/v0/networks/'+ getNet() +'/sm/devices/lock' , headers=headers, data= payload)
-    print(response.text.encode('utf8'))
+    # payload = '{"ids":"575334852397107558"}'
+    # response = requests.request("PUT", 'https://api.meraki.com/api/v0/networks/'+ getNet() +'/sm/devices/lock' , headers=headers, data= payload)
+    
     
 
 
